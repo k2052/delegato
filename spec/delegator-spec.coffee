@@ -21,6 +21,24 @@ describe "Delegator", ->
       object2.b = {a: 2}
       expect(object2.a).toBe 2
 
+    it "can delegate a property to the value of a property on another object", ->
+      object1 = new TestClass
+      object1.c = 20
+
+      object2 = new TestClass
+      object2.delegatesProperties 'c', toObject: object1
+
+      expect(object2.c).toBe 20
+
+    it "can delegate a method to a method on another object", ->
+      object1 = new TestClass
+      object1.c = -> "cats"
+
+      object2 = new TestClass
+      object2.delegatesMethods 'c', toObject: object1
+
+      expect(object2.c()).toBe "cats"
+
     it "can delegate a property to the result of a method on the current object", ->
       TestClass.delegatesProperties 'a', toMethod: 'getB'
       TestClass::getB = -> @b
